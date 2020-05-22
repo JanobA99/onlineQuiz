@@ -46,14 +46,6 @@ class _CreateQuizState extends State<CreateQuiz> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: appBar(context),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        iconTheme: IconThemeData(color: Colors.black87),
-        brightness: Brightness.light,
-      ),
       body: _isLoading
           ? Container(
               child: Center(
@@ -64,55 +56,63 @@ class _CreateQuizState extends State<CreateQuiz> {
               key: _formKey,
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  children: <Widget>[
-                    TextFormField(
-                      validator: (val) =>
-                          val.isEmpty ? "Enter Image Url" : null,
-                      decoration: InputDecoration(
-                        hintText: "Quiz Image Url",
-                      ),
-                      onChanged: (val) {
-                        quizImageUrl = val;
-                      },
-                    ),
-                    SizedBox(
-                      height: 6,
-                    ),
-                    TextFormField(
-                      validator: (val) =>
-                          val.isEmpty ? "Enter Quiz Title" : null,
-                      decoration: InputDecoration(
-                        hintText: "Quiz Title",
-                      ),
-                      onChanged: (val) {
-                        quizTitle = val;
-                      },
-                    ),
-                    SizedBox(
-                      height: 6,
-                    ),
-                    TextFormField(
-                      validator: (val) =>
-                          val.isEmpty ? "Enter Image Description" : null,
-                      decoration: InputDecoration(
-                        hintText: "Quiz Image Description",
-                      ),
-                      onChanged: (val) {
-                        quizDescription = val;
-                      },
-                    ),
-                    Spacer(),
-                    GestureDetector(
-                        onTap: () {
-                          createQuizOnline();
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      TextFormField(
+                        validator: (val) =>
+                            val.isEmpty ? "Enter Image Url" : null,
+                        decoration: InputDecoration(
+                          hintText:
+                              "Quiz Image Url(enter \"A\" if you do not have a URL)",
+                          hintStyle: TextStyle(fontSize: 14),
+                        ),
+                        onChanged: (val) {
+                          if (val == "A") {
+                            quizImageUrl =
+                                "https://www.ouest-france.fr/leditiondusoir/data/7781/NextGenData/1734152/img/main.jpg?v=-%20%00%%20-1504086508-%20%00%%20-";
+                          } else {
+                            quizImageUrl = val;
+                          }
                         },
-                        child:
-                            blueButton(context: context, label: "Create Quiz")),
-                    SizedBox(
-                      height: 60,
-                    ),
-                  ],
+                      ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                      TextFormField(
+                        validator: (val) =>
+                            val.isEmpty ? "Enter Quiz Title" : null,
+                        decoration: InputDecoration(
+                          hintText: "Quiz Title",
+                        ),
+                        onChanged: (val) {
+                          quizTitle = val;
+                        },
+                      ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                      TextFormField(
+                        validator: (val) =>
+                            val.isEmpty ? "Enter Image Description" : null,
+                        decoration: InputDecoration(
+                          hintText: "Quiz Image Description",
+                        ),
+                        onChanged: (val) {
+                          quizDescription = val;
+                        },
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 3,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            createQuizOnline();
+                          },
+                          child: blueButton(
+                              context: context, label: "Create Quiz")),
+                    ],
+                  ),
                 ),
               ),
             ),

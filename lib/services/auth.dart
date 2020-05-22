@@ -1,51 +1,113 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:online/models/user.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
-class AuthService {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+class AuthService{
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-  User _userFromFirebaseUser(FirebaseUser user) {
-    return user != null ? User(uid: user.uid) : null;
+  Stream<String> get onAuthStateChanged =>
+      _firebaseAuth.onAuthStateChanged.map((FirebaseUser user) => user?.uid,
+      );
+
+  // GET UID
+  Future<String> getCurrentUID() async {
+    return (await _firebaseAuth.currentUser()).uid;
+  }
+// Email & Password Sign Up
+  Future<String> createUserWithEmailAndPassword(
+      String email, String password, String name) async {
+    final currentUser = await _firebaseAuth.createUserWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    //Update the username
+    await updateUserName(name, currentUser.user);
+    return currentUser.user.uid;
   }
 
-  Future signInEmailAndPass(String email, String password) async {
-    try {
-      AuthResult authResult = await _auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      FirebaseUser firebaseUser = authResult.user;
-      return _userFromFirebaseUser(firebaseUser);
-    } catch (e) {
-      print(e);
-    }
+  Future updateUserName(String name, FirebaseUser currentUser) async {
+    var userUpdateInfo = UserUpdateInfo();
+    userUpdateInfo.displayName = name;
+    await currentUser.updateProfile(userUpdateInfo);
+    await currentUser.reload();
   }
 
-  Future signUpWithEmailAndPassword(String email, String password) async {
-    try {
-      AuthResult authResult = await _auth.createUserWithEmailAndPassword(
-          email: email, password: password);
-      FirebaseUser user = authResult.user;
-      return _userFromFirebaseUser(user);
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
+  //Email & Password Sign In
+  Future<String> signInUserWithEmailAndPassword(String email, String password) async{
+    return (await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password)).user.uid;
+  }
+  //Sign out
+  signOut() {
+    return _firebaseAuth.signOut();
+  }
+//Reset Password
+  Future sendPasswordResetEmail(String email) async{
+    return _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+// Sign In Anonymously
+  Future signInAnonymously() {
+    return _firebaseAuth.signInAnonymously();
   }
 
-  Future signOut() async {
-    try {
-      return await _auth.signOut();
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
+  Future convertUserWithEmail(String email, String password, String name) async {
+    final currentUser = await _firebaseAuth.currentUser();
+
+    final credential = EmailAuthProvider.getCredential(email: email, password: password);
+    await currentUser.linkWithCredential(credential);
+    await updateUserName(name, currentUser);
   }
 
-  Future resetPass(String email) async {
-    try {
-      return await _auth.sendPasswordResetEmail(email: email);
-    } catch (e) {
-      print(e.toString());
-      return null;
+  Future convertWithGoogle() async {
+    final currentUser = await _firebaseAuth.currentUser();
+    final GoogleSignInAccount account = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication _googleAuth= await account.authentication;
+    final AuthCredential credential= GoogleAuthProvider.getCredential(
+      idToken: _googleAuth.idToken,
+      accessToken: _googleAuth.accessToken,);
+    await currentUser.linkWithCredential(credential);
+    await updateUserName(_googleSignIn.currentUser.displayName, currentUser);
+  }
+
+//Google
+  Future<String> signInWithGoogle() async {
+    final GoogleSignInAccount account = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication _googleAuth= await account.authentication;
+    final AuthCredential credential= GoogleAuthProvider.getCredential(
+      idToken: _googleAuth.idToken,
+      accessToken: _googleAuth.accessToken,);
+    return (await _firebaseAuth.signInWithCredential(credential)).user.uid;
+  }
+}
+
+class NameValidator{
+  static String validate(String value){
+    if(value.isEmpty){
+      return "Name can't be empty";
     }
+    if(value.length < 3){
+      return "Name must be at least 2 characters long";
+    }
+    if(value.length > 50){
+      return "Name must be less than 50 characters long";
+    }
+    return null;
+  }
+}
+class EmailValidator{
+  static String validate(String value) {
+    if (value.isEmpty) {
+      return "Email can't be empty";
+    }
+    return null;
+  }
+}
+
+class PasswordValidator{
+  static String validate(String value) {
+    if (value.isEmpty) {
+      return "Password can't be empty";
+    }
+    return null;
   }
 }

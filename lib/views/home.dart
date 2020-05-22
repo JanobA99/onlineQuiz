@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:online/services/database.dart';
+import 'package:online/services/auth.dart';
 import 'package:online/views/create_quiz.dart';
-import 'package:online/views/play_quiz.dart';
+import 'package:online/views/quiz_list.dart';
+import 'package:online/widgets/provider_widget.dart';
 import 'package:online/widgets/widgets.dart';
 
 class Home extends StatefulWidget {
@@ -11,43 +12,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  Stream quizStream;
-  DatabaseService databaseService = new DatabaseService();
-
-  Widget quizList() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 24),
-      child: StreamBuilder(
-        stream: quizStream,
-        builder: (context, snapshot) {
-          return snapshot.data == null
-              ? Container()
-              : ListView.builder(
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (context, index) {
-                    return QuizTile(
-                      imgUrl: snapshot.data.documents[index].data["quizImgUrl"],
-                      description: snapshot
-                          .data.documents[index].data["quizDescription"],
-                      title: snapshot.data.documents[index].data["quizTitle"],
-                      quizid: snapshot.data.documents[index].data["quizId"],
-                    );
-                  });
-        },
-      ),
-    );
-  }
-
-  @override
-  void initState() {
-    databaseService.getQuizezData().then((val) {
-      setState(() {
-        quizStream = val;
-      });
-    });
-    super.initState();
-  }
-
+  int _currentIndex = 1;
+  final List<Widget> _children = [
+    CreateQuiz(),
+    QuizList(),
+    CreateQuiz(),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,86 +27,55 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         brightness: Brightness.light,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.exit_to_app,
+              color: Colors.black87,
+            ),
+            onPressed: () async {
+              try {
+                AuthService auth = Provider.of(context).auth;
+                await auth.signOut();
+                print("Signed Out");
+              } catch (e) {
+                print('Eror: $e');
+              }
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.account_circle, color: Colors.black87),
+            onPressed: () {
+              Navigator.of(context).pushNamed('/convertUser');
+            },
+          ),
+        ],
       ),
-      body: quizList(),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CreateQuiz(),
-              ));
-        },
+      body: _children[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        onTap: onTabTapped,
+        currentIndex: _currentIndex,
+        items: [
+          BottomNavigationBarItem(
+            title: Text('Add Quiz'),
+            icon: Icon(Icons.add_circle),
+          ),
+          BottomNavigationBarItem(
+            title: Text('Home'),
+            icon: Icon(Icons.home),
+          ),
+          BottomNavigationBarItem(
+            title: Text('Add Test'),
+            icon: Icon(Icons.add_box),
+          ),
+        ],
       ),
     );
   }
-}
 
-class QuizTile extends StatelessWidget {
-  final String imgUrl;
-  final String title;
-  final String description;
-  final String quizid;
-  QuizTile(
-      {@required this.imgUrl,
-      @required this.title,
-      @required this.description,
-      @required this.quizid});
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => QuizPlay(quizid),
-            ));
-      },
-      child: Container(
-        margin: EdgeInsets.only(bottom: 8),
-        height: 150.0,
-        child: Stack(
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(9),
-              child: Image.network(
-                imgUrl,
-                width: MediaQuery.of(context).size.width - 48,
-                fit: BoxFit.cover,
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(9),
-                  color: Colors.black26),
-              alignment: Alignment.center,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    title,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17.0,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(
-                    height: 9,
-                  ),
-                  Text(
-                    description,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w400),
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+  void onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
   }
 }
