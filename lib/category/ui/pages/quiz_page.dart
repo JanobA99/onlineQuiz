@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:html_unescape/html_unescape.dart';
-import 'package:trip6/models/category.dart';
-import 'package:trip6/models/question.dart';
-import 'package:trip6/ui/pages/quiz_finished.dart';
+import 'package:online/category/models2/category.dart';
+import 'package:online/category/models2/question.dart';
+import 'package:online/category/ui/pages/quiz_finished.dart';
 
 class QuizPage extends StatefulWidget {
   final List<Question> questions;

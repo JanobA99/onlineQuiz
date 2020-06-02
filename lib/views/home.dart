@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:online/category/ui/pages/home.dart';
 import 'package:online/services/auth.dart';
 import 'package:online/views/create_quiz.dart';
 import 'package:online/views/quiz_list.dart';
@@ -16,7 +17,7 @@ class _HomeState extends State<Home> {
   final List<Widget> _children = [
     CreateQuiz(),
     QuizList(),
-    CreateQuiz(),
+    HomePage(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -24,14 +25,14 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: appBar(context),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.blue,
         elevation: 0.0,
         brightness: Brightness.light,
         actions: <Widget>[
           IconButton(
             icon: Icon(
               Icons.exit_to_app,
-              color: Colors.black87,
+              color: Colors.white,
             ),
             onPressed: () async {
               try {
@@ -44,7 +45,7 @@ class _HomeState extends State<Home> {
             },
           ),
           IconButton(
-            icon: Icon(Icons.account_circle, color: Colors.black87),
+            icon: Icon(Icons.account_circle, color: Colors.white),
             onPressed: () {
               Navigator.of(context).pushNamed('/convertUser');
             },
@@ -65,8 +66,8 @@ class _HomeState extends State<Home> {
             icon: Icon(Icons.home),
           ),
           BottomNavigationBarItem(
-            title: Text('Add Test'),
-            icon: Icon(Icons.add_box),
+            title: Text('Category'),
+            icon: Icon(Icons.category),
           ),
         ],
       ),

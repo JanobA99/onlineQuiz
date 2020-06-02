@@ -22,6 +22,16 @@ class DatabaseService {
     });
   }
 
+  Future<void> addData(blogData) async {
+    Firestore.instance.collection("blogs").add(blogData).catchError((e) {
+      print(e);
+    });
+  }
+
+  getData() async {
+    return await Firestore.instance.collection("blogs").snapshots();
+  }
+
   getQuizezData() async {
     return await Firestore.instance.collection("Quiz").snapshots();
   }

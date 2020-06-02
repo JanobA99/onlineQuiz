@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:online/services/database.dart';
 import 'package:online/views/play_quiz.dart';
 
@@ -24,27 +25,38 @@ class _QuizListState extends State<QuizList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      margin: EdgeInsets.symmetric(horizontal: 12),
-      child: StreamBuilder(
-        stream: quizStream,
-        builder: (context, snapshot) {
-          return snapshot.data == null
-              ? Container()
-              : ListView.builder(
-                  itemCount: snapshot.data.documents.length,
-                  itemBuilder: (context, index) {
-                    return QuizTile(
-                      imgUrl: snapshot.data.documents[index].data["quizImgUrl"],
-                      description: snapshot
-                          .data.documents[index].data["quizDescription"],
-                      title: snapshot.data.documents[index].data["quizTitle"],
-                      quizId: snapshot.data.documents[index].data["quizId"],
-                    );
-                  });
-        },
+        body: Stack(children: <Widget>[
+      ClipPath(
+        clipper: WaveClipperTwo(),
+        child: Container(
+          decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+          height: MediaQuery.of(context).size.height / 3,
+        ),
       ),
-    ));
+      Container(
+        margin: EdgeInsets.symmetric(horizontal: 12),
+        child: StreamBuilder(
+          stream: quizStream,
+          builder: (context, snapshot) {
+            return snapshot.data == null
+                ? Container()
+                : ListView.builder(
+                    physics: BouncingScrollPhysics(),
+                    itemCount: snapshot.data.documents.length,
+                    itemBuilder: (context, index) {
+                      return QuizTile(
+                        imgUrl:
+                            snapshot.data.documents[index].data["quizImgUrl"],
+                        description: snapshot
+                            .data.documents[index].data["quizDescription"],
+                        title: snapshot.data.documents[index].data["quizTitle"],
+                        quizId: snapshot.data.documents[index].data["quizId"],
+                      );
+                    });
+          },
+        ),
+      ),
+    ]));
   }
 }
 

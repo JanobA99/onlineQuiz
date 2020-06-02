@@ -27,7 +27,6 @@ class _QuizPlayState extends State<QuizPlay> {
   DatabaseService databaseService = new DatabaseService();
 
   bool isLoading = true;
-
   @override
   void initState() {
     databaseService.getQuizData(widget.quizId).then((value) {
@@ -89,7 +88,7 @@ class _QuizPlayState extends State<QuizPlay> {
       appBar: AppBar(
         title: appBar(context),
         centerTitle: true,
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.blue,
         brightness: Brightness.light,
         elevation: 0.0,
       ),
@@ -113,17 +112,21 @@ class _QuizPlayState extends State<QuizPlay> {
                               child: Text("No Data"),
                             ),
                           )
-                        : ListView.builder(
-                            itemCount: questionSnaphot.documents.length,
-                            shrinkWrap: true,
-                            physics: ClampingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              return QuizPlayTile(
-                                questionModel: getQuestionModelFromDatasnapshot(
-                                    questionSnaphot.documents[index]),
-                                index: index,
-                              );
-                            })
+                        : WillPopScope(
+                            onWillPop: _onWillPop,
+                            child: ListView.builder(
+                                itemCount: questionSnaphot.documents.length,
+                                shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return QuizPlayTile(
+                                    questionModel:
+                                        getQuestionModelFromDatasnapshot(
+                                            questionSnaphot.documents[index]),
+                                    index: index,
+                                  );
+                                }),
+                          )
                   ],
                 ),
               ),
@@ -139,6 +142,18 @@ class _QuizPlayState extends State<QuizPlay> {
         child: Icon(Icons.check),
       ),
     );
+  }
+
+  Future<bool> _onWillPop() async {
+    return showDialog<bool>(
+        context: context,
+        builder: (_) {
+          return alertDialog(
+              context: context,
+              content: Text(
+                  "Are you sure you want to quit the quiz? All your progress will be lost."),
+              title: Text("Warning"));
+        });
   }
 }
 
@@ -246,6 +261,7 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
               description: "${widget.questionModel.option1}",
               correctAnswer: widget.questionModel.correctOption,
               optionSelected: optionSelected,
+              answered: widget.questionModel.answered,
             ),
           ),
           SizedBox(
@@ -278,6 +294,7 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
               description: "${widget.questionModel.option2}",
               correctAnswer: widget.questionModel.correctOption,
               optionSelected: optionSelected,
+              answered: widget.questionModel.answered,
             ),
           ),
           SizedBox(
@@ -310,6 +327,7 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
               description: "${widget.questionModel.option3}",
               correctAnswer: widget.questionModel.correctOption,
               optionSelected: optionSelected,
+              answered: widget.questionModel.answered,
             ),
           ),
           SizedBox(
@@ -342,6 +360,7 @@ class _QuizPlayTileState extends State<QuizPlayTile> {
               description: "${widget.questionModel.option4}",
               correctAnswer: widget.questionModel.correctOption,
               optionSelected: optionSelected,
+              answered: widget.questionModel.answered,
             ),
           ),
           SizedBox(

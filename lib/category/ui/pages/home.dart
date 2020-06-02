@@ -1,8 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-import 'package:trip6/models/category.dart';
-import 'package:trip6/ui/widgets/quiz_options.dart';
+import 'package:online/category/models2/category.dart';
+import 'package:online/category/ui/widgets/quiz_options.dart';
 
 class HomePage extends StatelessWidget {
   final List<Color> tileColors = [
@@ -21,53 +21,48 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('OpenTrivia'),
-          elevation: 0,
-        ),
         body: Stack(
-          children: <Widget>[
-            ClipPath(
-              clipper: WaveClipperTwo(),
-              child: Container(
-                decoration:
-                    BoxDecoration(color: Theme.of(context).primaryColor),
-                height: 200,
+      children: <Widget>[
+        ClipPath(
+          clipper: WaveClipperTwo(),
+          child: Container(
+            decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+            height: MediaQuery.of(context).size.height / 3,
+          ),
+        ),
+        CustomScrollView(
+          physics: BouncingScrollPhysics(),
+          slivers: <Widget>[
+            SliverToBoxAdapter(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Text(
+                  "Select a category to start the quiz",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16.0),
+                ),
               ),
             ),
-            CustomScrollView(
-              physics: BouncingScrollPhysics(),
-              slivers: <Widget>[
-                SliverToBoxAdapter(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 8.0),
-                    child: Text(
-                      "Select a category to start the quiz",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16.0),
-                    ),
-                  ),
-                ),
-                SliverPadding(
-                  padding: const EdgeInsets.all(16.0),
-                  sliver: SliverGrid(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          childAspectRatio: 1.2,
-                          crossAxisSpacing: 10.0,
-                          mainAxisSpacing: 10.0),
-                      delegate: SliverChildBuilderDelegate(
-                        _buildCategoryItem,
-                        childCount: categories.length,
-                      )),
-                ),
-              ],
+            SliverPadding(
+              padding: const EdgeInsets.all(16.0),
+              sliver: SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 1.2,
+                      crossAxisSpacing: 10.0,
+                      mainAxisSpacing: 10.0),
+                  delegate: SliverChildBuilderDelegate(
+                    _buildCategoryItem,
+                    childCount: categories.length,
+                  )),
             ),
           ],
-        ));
+        ),
+      ],
+    ));
   }
 
   Widget _buildCategoryItem(BuildContext context, int index) {

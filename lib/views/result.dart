@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:online/widgets/widgets.dart';
 
 class Results extends StatefulWidget {
   final int correct, incorrect, total;
@@ -13,37 +12,87 @@ class Results extends StatefulWidget {
 class _ResultsState extends State<Results> {
   @override
   Widget build(BuildContext context) {
+    final TextStyle titleStyle = TextStyle(
+        color: Colors.black87, fontSize: 16.0, fontWeight: FontWeight.w500);
+    final TextStyle trailingStyle = TextStyle(
+        color: Theme.of(context).primaryColor,
+        fontSize: 20.0,
+        fontWeight: FontWeight.bold);
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Result'),
+        elevation: 0,
+      ),
       body: Container(
-        height: MediaQuery.of(context).size.height,
-        child: Center(
+        height: double.infinity,
+        width: double.infinity,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(colors: [
+          Theme.of(context).primaryColor,
+          Theme.of(context).accentColor
+        ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                "${widget.correct}/${widget.total}",
-                style: TextStyle(fontSize: 25),
+              Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(16.0),
+                  title: Text("Total Questions", style: titleStyle),
+                  trailing: Text("${widget.total}", style: trailingStyle),
+                ),
               ),
-              SizedBox(
-                height: 8,
+              SizedBox(height: 10.0),
+              Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(16.0),
+                  title: Text("Score", style: titleStyle),
+                  trailing: Text("${widget.correct / widget.total * 100}%",
+                      style: trailingStyle),
+                ),
               ),
-              Text(
-                "You answered ${widget.correct} answers correctly "
-                "and ${widget.incorrect} answers incorrectly",
-                style: TextStyle(fontSize: 15, color: Colors.grey),
-                textAlign: TextAlign.center,
+              SizedBox(height: 10.0),
+              Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(16.0),
+                  title: Text("Correct Answers", style: titleStyle),
+                  trailing: Text("${widget.correct}/${widget.total}",
+                      style: trailingStyle),
+                ),
               ),
-              SizedBox(
-                height: 14,
+              SizedBox(height: 10.0),
+              Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(16.0),
+                  title: Text("Incorrect Answers", style: titleStyle),
+                  trailing: Text(
+                      "${widget.total - widget.correct}/${widget.total}",
+                      style: trailingStyle),
+                ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: blueButton(
-                    context: context,
-                    label: "Go to Home",
-                    buttonWidth: MediaQuery.of(context).size.width / 2),
+              SizedBox(height: 20.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  RaisedButton(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 20.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    color: Theme.of(context).accentColor.withOpacity(0.8),
+                    child: Text("Goto Home"),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
               )
             ],
           ),

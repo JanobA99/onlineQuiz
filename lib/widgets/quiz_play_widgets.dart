@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 
 class OptionTile extends StatefulWidget {
   final String option, description, correctAnswer, optionSelected;
-
+  final bool answered;
   OptionTile(
-      {this.description, this.correctAnswer, this.option, this.optionSelected});
+      {this.description,
+      this.correctAnswer,
+      this.option,
+      this.optionSelected,
+      this.answered});
 
   @override
   _OptionTileState createState() => _OptionTileState();
@@ -23,23 +27,34 @@ class _OptionTileState extends State<OptionTile> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 border: Border.all(
-                    color: widget.optionSelected == widget.description
+                    color: widget.answered
+                        ? widget.optionSelected == widget.description
+                            ? widget.description == widget.correctAnswer
+                                ? Colors.green.withOpacity(0.7)
+                                : Colors.red.withOpacity(0.7)
+                            : widget.description == widget.correctAnswer
+                                ? Colors.green.withOpacity(0.7)
+                                : Colors.grey
+                        : Colors.grey,
+                    width: 1.5),
+                color: widget.answered
+                    ? widget.optionSelected == widget.description
                         ? widget.description == widget.correctAnswer
                             ? Colors.green.withOpacity(0.7)
                             : Colors.red.withOpacity(0.7)
-                        : Colors.grey,
-                    width: 1.5),
-                color: widget.optionSelected == widget.description
-                    ? widget.description == widget.correctAnswer
-                        ? Colors.green.withOpacity(0.7)
-                        : Colors.red.withOpacity(0.7)
+                        : widget.description == widget.correctAnswer
+                            ? Colors.green.withOpacity(0.7)
+                            : Colors.white
                     : Colors.white,
                 borderRadius: BorderRadius.circular(24)),
             child: Text(
               widget.option,
               style: TextStyle(
-                color: widget.optionSelected == widget.description
-                    ? Colors.white
+                color: widget.answered
+                    ? widget.optionSelected == widget.description ||
+                            widget.description == widget.correctAnswer
+                        ? Colors.white
+                        : Colors.grey
                     : Colors.grey,
               ),
             ),

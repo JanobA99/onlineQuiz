@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:trip6/models/question.dart';
-import 'package:trip6/ui/pages/check_answers.dart';
+import 'package:online/category/models2/question.dart';
+import 'package:online/category/ui/pages/check_answers.dart';
 
 // ignore: must_be_immutable
 class QuizFinishedPage extends StatelessWidget {
