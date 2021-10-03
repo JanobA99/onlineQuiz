@@ -25,38 +25,56 @@ class _QuizListState extends State<QuizList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(children: <Widget>[
-      ClipPath(
-        clipper: WaveClipperTwo(),
-        child: Container(
-          decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-          height: MediaQuery.of(context).size.height / 3,
-        ),
-      ),
-      Container(
-        margin: EdgeInsets.symmetric(horizontal: 12),
-        child: StreamBuilder(
-          stream: quizStream,
-          builder: (context, snapshot) {
-            return snapshot.data == null
-                ? Container()
-                : ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    itemCount: snapshot.data.documents.length,
-                    itemBuilder: (context, index) {
-                      return QuizTile(
-                        imgUrl:
-                            snapshot.data.documents[index].data["quizImgUrl"],
-                        description: snapshot
-                            .data.documents[index].data["quizDescription"],
-                        title: snapshot.data.documents[index].data["quizTitle"],
-                        quizId: snapshot.data.documents[index].data["quizId"],
+      body: Stack(
+        children: <Widget>[
+          ClipPath(
+            clipper: WaveClipperTwo(),
+            child: Container(
+              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+              height: MediaQuery.of(context).size.height / 3,
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 12),
+            child: StreamBuilder(
+              stream: quizStream,
+              builder: (context, snapshot) {
+                return snapshot.data == null
+                    ? Container()
+                    : ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        itemCount: snapshot.data.documents.length,
+                        itemBuilder: (context, index) {
+                          return QuizTile(
+                            imgUrl: snapshot
+                                .data
+                                .documents[
+                                    snapshot.data.documents.length - index - 1]
+                                .data["quizImgUrl"],
+                            description: snapshot
+                                .data
+                                .documents[
+                                    snapshot.data.documents.length - index - 1]
+                                .data["quizDescription"],
+                            title: snapshot
+                                .data
+                                .documents[
+                                    snapshot.data.documents.length - index - 1]
+                                .data["quizTitle"],
+                            quizId: snapshot
+                                .data
+                                .documents[
+                                    snapshot.data.documents.length - index - 1]
+                                .data["quizId"],
+                          );
+                        },
                       );
-                    });
-          },
-        ),
+              },
+            ),
+          ),
+        ],
       ),
-    ]));
+    );
   }
 }
 
@@ -65,11 +83,13 @@ class QuizTile extends StatelessWidget {
   final String title;
   final String description;
   final String quizId;
+
   QuizTile(
       {@required this.imgUrl,
       @required this.title,
       @required this.description,
       @required this.quizId});
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -101,12 +121,16 @@ class QuizTile extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(
-                    title,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17.0,
-                        fontWeight: FontWeight.w500),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                   SizedBox(
                     height: 9,

@@ -13,5 +13,5 @@ class Provider extends InheritedWidget {
   // ignore: deprecated_member_use
   static Provider of(BuildContext context) =>
       // ignore: deprecated_member_use
-      (context.inheritFromWidgetOfExactType(Provider) as Provider);
+      context.dependOnInheritedWidgetOfExactType<Provider>();
 }

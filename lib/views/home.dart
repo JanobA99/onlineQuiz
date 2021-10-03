@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:online/category/ui/pages/home.dart';
 import 'package:online/services/auth.dart';
 import 'package:online/views/create_quiz.dart';
 import 'package:online/views/quiz_list.dart';
@@ -17,7 +16,6 @@ class _HomeState extends State<Home> {
   final List<Widget> _children = [
     CreateQuiz(),
     QuizList(),
-    HomePage(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -53,24 +51,20 @@ class _HomeState extends State<Home> {
         ],
       ),
       body: _children[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: onTabTapped,
-        currentIndex: _currentIndex,
-        items: [
-          BottomNavigationBarItem(
-            title: Text('Add Quiz'),
-            icon: Icon(Icons.add_circle),
-          ),
-          BottomNavigationBarItem(
-            title: Text('Home'),
-            icon: Icon(Icons.home),
-          ),
-          BottomNavigationBarItem(
-            title: Text('Category'),
-            icon: Icon(Icons.category),
-          ),
-        ],
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   onTap: onTabTapped,
+      //   currentIndex: _currentIndex,
+      //   items: [
+      //     BottomNavigationBarItem(
+      //       title: Text('Add Quiz'),
+      //       icon: Icon(Icons.add_circle),
+      //     ),
+      //     BottomNavigationBarItem(
+      //       title: Text('Home'),
+      //       icon: Icon(Icons.home),
+      //     ),
+      //   ],
+      // ),
     );
   }
 

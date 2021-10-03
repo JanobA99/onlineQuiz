@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:online/category/models2/category.dart';
 import 'package:online/services/database.dart';
 import 'package:online/views/add_question.dart';
 import 'package:online/widgets/widgets.dart';
@@ -166,27 +165,6 @@ class _CreateQuizState extends State<CreateQuiz> {
                           onChanged: (val) {
                             quizDescription = val;
                           },
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Text("Select Category"),
-                            PopupMenuButton(
-                              icon: Icon(Icons.keyboard_arrow_down),
-                              itemBuilder: (BuildContext context) {
-                                return categories.map((Category categories) {
-                                  return PopupMenuItem(
-                                    value: null,
-                                    child: Container(
-                                      child: ListTile(
-                                        title: Text(categories.name),
-                                      ),
-                                    ),
-                                  );
-                                }).toList();
-                              },
-                              elevation: 2.0,
-                            ),
-                          ],
                         ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height / 5,

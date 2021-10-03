@@ -28,33 +28,18 @@ class _OptionTileState extends State<OptionTile> {
             decoration: BoxDecoration(
                 border: Border.all(
                     color: widget.answered
-                        ? widget.optionSelected == widget.description
-                            ? widget.description == widget.correctAnswer
-                                ? Colors.green.withOpacity(0.7)
-                                : Colors.red.withOpacity(0.7)
-                            : widget.description == widget.correctAnswer
-                                ? Colors.green.withOpacity(0.7)
-                                : Colors.grey
-                        : Colors.grey,
+                        ?  Colors.green.withOpacity(0.7)
+                    : Colors.grey,
                     width: 1.5),
                 color: widget.answered
-                    ? widget.optionSelected == widget.description
-                        ? widget.description == widget.correctAnswer
-                            ? Colors.green.withOpacity(0.7)
-                            : Colors.red.withOpacity(0.7)
-                        : widget.description == widget.correctAnswer
-                            ? Colors.green.withOpacity(0.7)
-                            : Colors.white
-                    : Colors.white,
+                    ? Colors.green.withOpacity(0.7)
+              : Colors.white,
                 borderRadius: BorderRadius.circular(24)),
             child: Text(
               widget.option,
               style: TextStyle(
                 color: widget.answered
-                    ? widget.optionSelected == widget.description ||
-                            widget.description == widget.correctAnswer
-                        ? Colors.white
-                        : Colors.grey
+                    ? Colors.white
                     : Colors.grey,
               ),
             ),

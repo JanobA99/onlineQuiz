@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class Results extends StatefulWidget {
-  final int correct, incorrect, total;
+  final int sum;
 
-  Results(
-      {@required this.correct, @required this.incorrect, @required this.total});
+  Results({@required this.sum});
+
   @override
   _ResultsState createState() => _ResultsState();
 }
@@ -19,85 +19,29 @@ class _ResultsState extends State<Results> {
         fontSize: 20.0,
         fontWeight: FontWeight.bold);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Result'),
-        elevation: 0,
-      ),
-      body: Container(
-        height: double.infinity,
-        width: double.infinity,
-        decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-          Theme.of(context).primaryColor,
-          Theme.of(context).accentColor
-        ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: <Widget>[
-              Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(16.0),
-                  title: Text("Total Questions", style: titleStyle),
-                  trailing: Text("${widget.total}", style: trailingStyle),
-                ),
-              ),
-              SizedBox(height: 10.0),
-              Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(16.0),
-                  title: Text("Score", style: titleStyle),
-                  trailing: Text("${widget.correct / widget.total * 100}%",
-                      style: trailingStyle),
-                ),
-              ),
-              SizedBox(height: 10.0),
-              Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(16.0),
-                  title: Text("Correct Answers", style: titleStyle),
-                  trailing: Text("${widget.correct}/${widget.total}",
-                      style: trailingStyle),
-                ),
-              ),
-              SizedBox(height: 10.0),
-              Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0)),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(16.0),
-                  title: Text("Incorrect Answers", style: titleStyle),
-                  trailing: Text(
-                      "${widget.total - widget.correct}/${widget.total}",
-                      style: trailingStyle),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  RaisedButton(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16.0, vertical: 20.0),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    color: Theme.of(context).accentColor.withOpacity(0.8),
-                    child: Text("Goto Home"),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
-              )
-            ],
+        appBar: AppBar(
+          title: Text('Result'),
+          elevation: 0,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.only(left: 20,right: 20,bottom: 30),
+          child: Center(
+            child: 49 <= widget.sum && widget.sum <= 56
+                ? Text(
+                    "Great interest in signature systems. Ideal profession - editor, secretary, economist, painter, cartographer;",style: TextStyle(fontSize: 18),textAlign: TextAlign.center,)
+                : 37 <= widget.sum && widget.sum <= 48
+                    ? Text(
+                        "Interest in signature systems has increased. It is better to give preference to the profession of manager, lawyer, financier, journalist;",style: TextStyle(fontSize: 18),textAlign: TextAlign.center,)
+                    : 25 <= widget.sum && widget.sum <= 36
+                        ? Text(
+                            "Certain interests cannot be separated. You should try not to choose the second option of the answer or repeat the test to move on to another test;",style: TextStyle(fontSize: 18),textAlign: TextAlign.center,)
+                        : 13 <= widget.sum && widget.sum <= 24
+                            ? Text(
+                                "There is a great interest in creativity. The best areas of activity are production, advertising, design, psychology, journalism, etc .;",style: TextStyle(fontSize: 18),textAlign: TextAlign.center,)
+                            : Text(
+                                "'Free Artist'. In this case, it is better to work as a sole proprietor or freelancer.",style: TextStyle(fontSize: 18),textAlign: TextAlign.center,),
           ),
         ),
-      ),
     );
   }
 }
